@@ -1,0 +1,104 @@
+*************COPY THE CODE CAUTIOUSLY. DO NOT COPY THE COMMENTS. COMMENTS GET SHIFTED ACCORDING TO TAB SIZE****************************
+
+
+#Run the code if not run install following libraries
+#then run code
+
+pip install chatterbot==1.0.4
+pip install spacy
+pip install --upgrade PyYaml==3.12
+
+_________________________________________________________________________
+
+Code-
+
+import spacy
+from chatterbot.trainers import ChatterBotCorpusTrainer, ListTrainer
+from chatterbot import ChatBot
+import time
+
+time.clock = time.time
+
+chatbot = ChatBot('Google')
+trainer = ListTrainer(chatbot)
+
+custom_data = [
+    "Hi, can I help you?",
+    'I am good, thank you!',
+    'What is your favorite color?',
+    'I don\'t have preferences as an AI',
+    'Tell me a fun fact',
+    'Did you know that honey never spoils',
+    'What do you like to do in your free time?',
+    'As an AI, I don\'t have free time, but I enjoy helping and interacting with people!',
+    'Do you have any pets?',
+    'Since I am a virtual assistant, I don\'t have any pets.'
+]
+
+chatbot.storage.drop()
+trainer.train(custom_data)
+
+while True:
+    user_input = input("You: ")
+    if user_input == "exit":
+        break
+    response = chatbot.get_response(user_input)
+    print("ChatBot:", response)
+
+
+
+--------------------------------------------------------------------------------------------------------------
+Explanation-
+
+
+The code you provided is an implementation of a simple chatbot using the ChatterBot library and the spaCy natural language processing library. Let's go through the code step by step:
+
+1. Importing Required Libraries:
+   - `import spacy`: Imports the spaCy library for natural language processing.
+   - `from chatterbot.trainers import ChatterBotCorpusTrainer, ListTrainer`: Imports the ChatterBotCorpusTrainer and ListTrainer classes from the ChatterBot library.
+   - `from chatterbot import ChatBot`: Imports the ChatBot class from the ChatterBot library.
+   - `import time`: Imports the time module.
+
+2. Time Configuration:
+   - `time.clock = time.time`: Assigns the `time.time` function to `time.clock`. This line seems to be unnecessary and can be omitted.
+
+3. ChatBot Initialization and Training:
+   - `chatbot = ChatBot('Google')`: Creates a new ChatBot instance with the name 'Google'.
+   - `trainer = ListTrainer(chatbot)`: Creates a ListTrainer instance for the chatbot to train it with custom data.
+
+4. Custom Training Data:
+   - `custom_data`: A list containing custom training data for the chatbot. It includes pairs of user input and corresponding responses.
+
+5. Dropping Existing Training Data:
+   - `chatbot.storage.drop()`: Drops any existing training data stored by the chatbot. This is done to start with a fresh training session.
+
+6. Training the ChatBot:
+   - `trainer.train(custom_data)`: Trains the chatbot using the custom training data provided in the `custom_data` list. The chatbot learns patterns and responses based on this data.
+
+7. Chatting Loop:
+   - `while True:`: Starts an infinite loop for chatting with the chatbot.
+   - `user_input = input("You: ")`: Takes user input from the console.
+   - `if user_input == "exit":`: Checks if the user wants to exit the chatbot.
+   - `response = chatbot.get_response(user_input)`: Gets the chatbot's response for the user input using the `get_response` method.
+   - `print("ChatBot:", response)`: Prints the chatbot's response to the console.
+
+The code creates a chatbot instance, trains it with custom data, and allows the user to have a conversation with the chatbot by entering inputs. The chatbot responds based on the trained patterns and responses. The conversation continues until the user enters "exit" to exit the program.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

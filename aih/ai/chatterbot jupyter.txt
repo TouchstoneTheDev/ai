@@ -1,0 +1,47 @@
+*************COPY THE CODE CAUTIOUSLY. DO NOT COPY THE COMMENTS. COMMENTS GET SHIFTED ACCORDING TO TAB SIZE****************************
+
+pip install chatterbot==1.0.4
+
+pip install spacy
+
+import spacy
+
+pip install --upgrade PyYaml==3.12
+
+from chatterbot.trainers import ChatterBotCorpusTrainer
+
+from chatterbot import ChatBot
+
+from chatterbot.trainers import ListTrainer
+
+import time
+
+time.clock = time.time
+
+chatbot = ChatBot('Google')
+
+trainer = ListTrainer ( chatbot)
+
+custom_data = [
+ "Hi, can I help you?" ,
+ 'I am good, thank you!',
+ 'What is your favorite color?',
+ 'I don\'t have preferences as an AI' ,
+ 'Tell me a fun fact',
+ 'Did you know that honey never spoils',
+ 'What do you like to do in your free time?',
+ 'As an AI, I don\'t have free time, but I enjoy helping and interacted with people!',
+ 'Do you have any pets?',
+ 'Since I am a virtual assistent, I don\'t have any pets.',
+]
+
+chatbot.storage.drop()
+
+trainer.train(custom_data)
+
+while True:
+    user_input = input("You: ")
+    if user_input == "exit":
+        break;
+    response = chatbot.get_response(user_input)
+    print("ChartBot:", response)

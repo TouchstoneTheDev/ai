@@ -1,0 +1,281 @@
+*****Time Complexity= O(b^d)*********
+b = branch   ,    d=depth
+*************COPY THE CODE CAUTIOUSLY. DO NOT COPY THE COMMENTS. COMMENTS GET SHIFTED ACCORDING TO TAB SIZE****************************
+
+EXPERIMENT NO. 2
+Aim: Implement A star Algorithm for any game search problem.
+
+Objective:
+
+• To understand Heuristic search and functions
+• To understand working of A* algorithm
+
+
+
+#########################################Code:##############################################
+
+#These lines import necessary modules for the code: deepcopy from the copy module, numpy as np for numerical operations, and time for measuring execution #time.
+
+from  copy import deepcopy
+import numpy as np
+import time
+
+#This function bestsolution takes the state as input, which represents the state of the puzzle at each step. It retrieves the best solution by traversing #the states from the goal state to the initial state using the parent attribute. It returns the reshaped best solution array.
+
+def bestsolution(state):
+    bestsol = np.array([], int).reshape(-1, 9)
+    count = len(state) - 1
+    while count != -1:
+        bestsol = np.insert(bestsol, 0, state[count]['puzzle'], 0)
+        count = (state[count]['parent'])
+    return bestsol.reshape(-1, 3, 3)
+        
+#This function all takes checkarray as input but doesn't seem to be used or implemented correctly. It returns 1 or 0 based on certain conditions that are #not clear.
+
+def all(checkarray):
+    set=[]
+    for it in set:
+        for checkarray in it:
+            return 1
+        else:
+            return 0
+
+
+#This function manhattan calculates the Manhattan distance heuristic between the current puzzle state and the goal state. It calculates the vertical and #horizontal distances between each number in the puzzle and its corresponding position in the goal state grid. It returns the sum of these distances.
+
+def manhattan(puzzle, goal):
+    a = abs(puzzle // 3 - goal // 3)
+    b = abs(puzzle % 3 - goal % 3)
+    mhcost = a + b
+    return sum(mhcost[1:])
+
+#This function misplaced_tiles calculates the number of misplaced tiles in the puzzle state compared to the goal state. It uses the numpy array comparison #to count the number of unequal elements and subtracts 1 (as the blank tile is also counted). It returns the count if it is greater than 0, otherwise 0.
+
+def misplaced_tiles(puzzle,goal):
+    mscost = np.sum(puzzle != goal) - 1
+    return mscost if mscost > 0 else 0
+ 
+#This function coordinates takes the puzzle state as input and returns an array pos that represents the coordinates of each number in the puzzle. It assigns #the index of each number in the puzzle to its corresponding position in pos.
+
+def coordinates(puzzle):
+    pos = np.array(range(9))
+    for p, q in enumerate(puzzle):
+        pos[q] = p
+    return pos
+
+
+#This function evaluvate takes the initial puzzle state and the goal state as input and performs the A* search algorithm to solve the 8-puzzle problem using #the Manhattan distance heuristic. It uses several data structures like steps, dtstate, costg, dtpriority, state, and priority to store the puzzle states, #their properties, and the priority queue for selecting the next state.
+
+#The function initializes the state with the initial puzzle state and other attributes like parent, gn (the cost to reach the current state), and hn (the #heuristic cost). It also initializes the priority queue with the initial state's heuristic cost. The function then enters a while loop where it continues #until the goal state is reached or all possible states are explored.
+
+#Inside the loop, it selects the state with the lowest fn value from the priority queue. It updates the puzzle, parent, gn, and hn variables with the #selected state's values. It then finds the position of the blank tile (0) in the puzzle. It increments the gn value by 1 to represent the cost of reaching #the current state.
+
+#Next, it iterates over the possible moves (steps) and checks if the blank tile can move in that direction. If it can, it creates a new state openstates by #swapping the blank tile with the adjacent tile according to the move. It checks if this new state has been visited before using the state array. If it's a #new state, it calculates the heuristic cost hn for the new state and adds it to the state array and priority queue.
+
+#If the goal state is reached, it prints a message and returns the final state and the length of the priority queue.
+
+def evaluvate(puzzle, goal):
+    steps = np.array([('up', [0, 1, 2], -3),('down', [6, 7, 8], 3),('left', [0, 3, 6], -1),('right', [2, 5, 8], 1)],
+    dtype = [('move', str, 1),('position', list),('head', int)])
+    dtstate = [('puzzle', list),('parent', int),('gn', int),('hn', int)]
+    costg = coordinates(goal)
+    parent = -1
+    gn = 0
+    hn = manhattan(coordinates(puzzle), costg)
+    state = np.array([(puzzle, parent, gn, hn)], dtstate)
+    dtpriority = [('position', int),('fn', int)]
+    priority = np.array( [(0, hn)], dtpriority)
+    while 1:
+        priority = np.sort(priority, kind='mergesort', order=['fn', 'position']) 
+        position, fn = priority[0] 
+        priority = np.delete(priority, 0, 0)
+        puzzle, parent, gn, hn = state[position]
+        puzzle = np.array(puzzle)
+        blank = int(np.where(puzzle == 0)[0])
+        gn = gn + 1
+        c = 1
+        start_time = time.time()
+        for s in steps:
+            c = c + 1
+            if blank not in s['position']:
+                openstates = deepcopy(puzzle)
+                openstates[blank], openstates[blank + s['head']] = openstates[blank + s['head']],openstates[blank]
+                if ~(np.all(list(state['puzzle']) == openstates, 1)).any():
+                    end_time = time.time()
+                    if (( end_time - start_time ) > 2):
+                        print(" The 8 puzzle is unsolvable ! \n")
+                        exit
+                    hn = manhattan(coordinates(openstates), costg)
+                    q = np.array([(openstates, position, gn, hn)], dtstate)
+                    state = np.append(state, q, 0)
+                    fn = gn + hn
+                    q = np.array([(len(state) - 1, fn)], dtpriority)
+                    priority = np.append(priority, q, 0)
+                    if np.array_equal(openstates, goal):
+                        print(' The 8 puzzle is solvable ! \n')
+                        return state, len(priority)
+    return state, len(priority)
+
+
+#This function evaluvate_misplaced is similar to the evaluvate function, but it uses the misplaced tiles heuristic instead of the Manhattan distance #heuristic. It performs the same A* search algorithm with some modifications to calculate the heuristic cost using the misplaced_tiles function.
+
+
+def evaluvate_misplaced(puzzle, goal):
+    steps = np.array([('up', [0, 1, 2], -3),('down', [6, 7, 8], 3),('left', [0, 3, 6], -1),('right', [2, 5, 8], 1)],
+    dtype = [('move', str, 1),('position', list),('head', int)])
+    dtstate = [('puzzle', list),('parent', int),('gn', int),('hn', int)]
+    costg = coordinates(goal)
+    parent = -1
+    gn = 0
+    hn = misplaced_tiles(coordinates(puzzle), costg)
+    state = np.array([(puzzle, parent, gn, hn)], dtstate)
+    dtpriority = [('position', int),('fn', int)]
+    priority = np.array([(0, hn)], dtpriority)
+    while 1:
+        priority = np.sort(priority, kind='mergesort', order=['fn', 'position'])
+        position, fn = priority[0]
+        priority = np.delete(priority, 0, 0)
+        puzzle, parent, gn, hn = state[position]
+        puzzle = np.array(puzzle)
+        blank = int(np.where(puzzle == 0)[0])
+        gn = gn + 1
+        c = 1
+        start_time = time.time()
+        for s in steps:
+            c = c + 1
+            if blank not in s['position']:
+                openstates = deepcopy(puzzle)
+                openstates[blank], openstates[blank + s['head']] = openstates[blank + s['head']],openstates[blank]
+                if ~(np.all(list(state['puzzle']) == openstates, 1)).any():
+                    end_time = time.time()
+                    if (( end_time - start_time ) > 2):
+                        print(" The 8 puzzle is unsolvable \n")
+                        break
+                    hn = misplaced_tiles(coordinates(openstates), costg)
+                    q = np.array([(openstates, position, gn, hn)], dtstate)
+                    state = np.append(state, q, 0)
+                    fn = gn + hn
+                    q = np.array([(len(state) - 1, fn)], dtpriority)
+                    priority = np.append(priority, q, 0)
+                    if np.array_equal(openstates, goal):
+                        print(' The 8 puzzle is solvable \n')
+                        return state, len(priority)
+    return state, len(priority)
+
+
+#The rest of the code handles user input and calls the appropriate functions based on the chosen heuristic (Manhattan distance or misplaced tiles). It #prints the best solution path, total moves, total nodes visited, and the total number of generated states.
+
+puzzle = []
+print(" Input vals from 0-8 for start state ")
+for i in range(0,9):
+    x = int(input("enter vals :"))
+    puzzle.append(x)
+
+goal = []
+print(" Input vals from 0-8 for goal state ")
+for i in range(0,9):
+    x = int(input("Enter vals :"))
+    goal.append(x)
+n = int(input("1. Manhattan distance \n2. Misplaced tiles"))
+if(n ==1 ):
+    state, visited = evaluvate(puzzle, goal)
+    bestpath = bestsolution(state)
+    print(str(bestpath).replace('[', ' ').replace(']', ''))
+    totalmoves = len(bestpath) - 1
+    print('Steps to reach goal:',totalmoves)
+    visit = len(state) - visited
+    print('Total nodes visited: ',visit, "\n")
+    print('Total generated:', len(state))
+if(n == 2):
+    state, visited = evaluvate_misplaced(puzzle, goal)
+    bestpath = bestsolution(state)
+    print(str(bestpath).replace('[', ' ').replace(']', ''))
+    totalmoves = len(bestpath) - 1
+    print('Steps to reach goal:',totalmoves)
+    visit = len(state) - visited
+    print('Total nodes visited: ',visit, "\n")
+    print('Total generated:', len(state))
+
+###########################################More Detailed:#######################################3
+
+The copy module is imported to use the deepcopy function, which creates a deep copy of objects.
+The numpy library is imported as np1.
+The time module is imported to measure the execution time of certain parts of the code.
+
+'bestsolution' function takes the state as input and returns the best solution by extracting the puzzle states from the state array.
+
+This function seems to be incomplete and doesn't serve any purpose in the code. It defines a function 'all' that takes 'checkarray' as input, but the implementation is incorrect.
+
+'manhattan' function calculates the Manhattan distance between the 'puzzle' state and the 'goal' state. It calculates the absolute difference in row and column positions for each element and sums them up.
+
+'misplaced_tiles' function calculates the number of misplaced tiles between the 'puzzle' state and the 'goal' state. It compares the elements of the two arrays and counts the number of elements that are not equal.
+
+'coordinates' function calculates the positions of elements in the 'puzzle' state. It creates an array 'pos' with values from 0 to 8 and assigns the positions of elements in the 'puzzle' state based on their values.
+
+'evaluvate' function is the main algorithm that evaluates the puzzle state and finds the solution using the A* search algorithm with the Manhattan distance heuristic. It takes the 'puzzle' state and the 'goal' state as input.
+It initializes various data structures such as 'steps', 'dtstate', 'costg', 'state', 'dtpriority', and 'priority'.
+It enters a while loop and continues until a solution is found or the search space is exhausted.
+Inside the loop, it selects the highest priority state based on the evaluation function 'fn' and explores its neighbors by swapping the blank tile with adjacent tiles.
+It checks if the neighbor state is already in the 'state' array to avoid revisiting previously explored states.
+It calculates the heuristic values 'hn' and 'fn' for the neighbor state and adds it to the 'state' and 'priority' arrays.
+If the goal state is reached, it prints a message and returns the 'state' array and the length of the 'priority' array.
+
+'evaluvate_misplaced' function is similar to 'evaluvate' but uses the misplaced tiles heuristic instead of the Manhattan distance heuristic.
+
+The rest of the code prompts the user to input the puzzle and goal states, as well as the choice of heuristic (Manhattan distance or misplaced tiles). It then calls the corresponding functions ('evaluvate' or 'evaluvate_misplaced') to find the solution, prints the solution path, total moves, nodes visited, and total nodes generated.
+
+
+############################################Theory:##########################################
+
+A* Search algorithm is one of the best and popular technique used in path-finding and graph traversals.
+It is one which is the process of finding a path between multiple points, called "nodes". It enjoys
+widespread use due to its performance and accuracy. However, in practical travel-routing systems, it is
+generally outperformed by algorithms which can pre-process the graph to attain better performance,
+although other work has found A* to be superior to other approaches.
+It is best-known form of Best First search. It avoids expanding paths that are already expensive, but
+expands most promising paths first.
+
+
+
+
+
+INPUT-
+_______________________________________________________________________________________________
+
+ Input vals from 0-8 for start state 
+enter vals :1
+enter vals :2
+enter vals :3
+enter vals :4
+enter vals :5
+enter vals :6
+enter vals :7
+enter vals :8
+enter vals :0
+ Input vals from 0-8 for goal state 
+Enter vals :1
+Enter vals :2
+Enter vals :3
+Enter vals :4
+Enter vals :5
+Enter vals :6
+Enter vals :7
+Enter vals :0
+Enter vals :8
+1. Manhattan distance 
+2. Misplaced tiles1
+ The 8 puzzle is solvable ! 
+
+   1 2 3
+   4 5 6
+   7 8 0
+
+   1 2 3
+   4 5 6
+   7 0 8
+Steps to reach goal: 1
+Total nodes visited:  1 
+
+Total generated: 3
+
+________________________________________________________________________________________

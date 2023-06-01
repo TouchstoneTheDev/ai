@@ -1,0 +1,100 @@
+*******Time Complexity = O(b^m)   m=max depth*******
+*******Space Complexity = O(bm)   m=max depth*******
+*************COPY THE CODE CAUTIOUSLY. DO NOT COPY THE COMMENTS. COMMENTS GET SHIFTED ACCORDING TO TAB SIZE****************************
+
+#DFS
+
+
+#This is a class definition for Graph.
+#It has a constructor method __init__ that initializes an empty dictionary graph as an instance variable.
+
+class Graph():
+    def __init__(self):
+        self.graph={}
+
+#This is a method dfs defined within the Graph class, which performs depth-first search (DFS) traversal on the graph.
+#It takes two parameters: v represents the current vertex/node being visited, and visited is a set of already visited nodes (optional, defaulting to None).
+#If visited is None, it initializes an empty set using visited = set().
+#The current node v is added to the visited set using visited.add(v).
+#The value of the current node v is printed, followed by a space, using print(v, end=" ").
+#It then iterates over the neighbors of the current node using for n in self.graph.get(v, []):.
+#If a neighbor n is not in the visited set, it recursively calls self.dfs(n, visited), passing the neighbor n and the updated visited set.
+
+    
+    def dfs(self, v , visited = None):
+        if visited is None:
+            visited = set()
+
+        visited.add(v)
+        print(v, end=" ")
+
+        for n in self.graph.get(v, []):
+            if n not in visited:
+                self.dfs(n, visited)
+
+#This creates an instance of the Graph class and assigns it to the variable graph.
+
+graph = Graph()
+
+#This prompts the user to enter the number of nodes in the graph and reads the input as an integer, storing it in the variable num_node.
+
+num_node = int(input("Enter number of node : "))
+
+#Finally, it assigns the children list to the node key in the graph.graph dictionary, representing the adjacency list for that node.
+
+for i in range(num_node):
+    node= int(input(f"Enter the {i+1} node : "))
+    has_children = input(f"Does the node {node} has any children y/n ? : ")
+    
+    if has_children.lower() == 'y':
+        children = []
+        
+        while True:
+            print(f"Menu for node {node}")
+            print("1. Add children")
+            print("2. Finish adding children")
+            
+            choice = int(input("Enter your choice : "))
+            if choice == 1:
+                child = int(input(f"Enter child for node {node} : "))
+                children.append(child)
+            elif choice == 2:
+                break
+            else:
+                print("Invalid choice !!")
+                
+        graph.graph[node] = children
+
+
+#This prompts the user to enter the starting node for the DFS traversal and reads the input as an integer, storing it in the variable start_node.
+
+start_node = int(input("Start node : "))
+
+#This prints the string "DFS traversal:" as a prompt.
+
+print("DFS traversal : ")
+graph.dfs(start_node)
+
+
+Theory:
+
+DEPTH FIRST SEARCH (DFS)
+
+Depth first Search or Depth first traversal is a recursive algorithm for searching all the vertices of a
+graph or tree data structure. Traversal means visiting all the nodes of a graph.
+
+The DFS algorithm works as follows:
+1. Start by putting any one of the graph's vertices on top of a stack.
+2. Take the top item of the stack and add it to the visited list.
+3. Create a list of that vertex's adjacent nodes. Add the ones which aren't in the visited list
+to the top of the stack.
+4. Keep repeating steps 2 and 3 until the stack is empty.
+
+
+Complexity of Depth First Search
+The time complexity of the DFS algorithm is represented in the form of O(V + E), where V is the
+number of nodes and E is the number of edges. The space complexity of the algorithm is O(V).
+
+Application of DFS Algorithm
+1. For finding the path
+2. To test if the graph is bipartite

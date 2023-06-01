@@ -1,0 +1,70 @@
+N-Queen Problem:
+The N Queen is the problem of placing N chess queens on an N×N chessboard so that no two queens attack each other. 
+
+Backtracking-
+Backtracking: Backtracking is a general algorithmic technique used to explore all possible solutions by incrementally building a solution and undoing choices that lead to dead ends. In the context of the N-queens problem, backtracking involves systematically placing queens on a chessboard and checking if they attack each other. If a queen is found to be attacking another queen, the algorithm backtracks and tries a different position. This process continues until a valid solution is found or all possibilities have been exhausted.
+
+Branch and Bound-
+Branch and Bound: Branch and bound is an optimization algorithm that solves combinatorial optimization problems by systematically exploring the solution space. It uses a divide-and-conquer strategy to partition the problem into smaller subproblems and dynamically keeps track of the best solution found so far.
+
+___________________________________________________________________________________________________________________________________
+###################################################################################################################################
+
+
+prolog-
+
+Prolog is a programming language based on logic programming. It stands for "Programming in Logic" and was developed in the early 1970s by Alain Colmerauer and Philippe Roussel at the University of Aix-Marseille in France.
+
+Prolog is a declarative language where programs are expressed as a set of logical rules and facts. It is particularly well-suited for tasks that involve symbolic or logical reasoning, such as artificial intelligence, natural language processing, expert systems, and automated reasoning.
+
+One of the distinguishing features of Prolog is its use of backtracking. When a query is made, Prolog attempts to find a solution by searching through the available rules and facts. If it reaches a point where a rule or fact fails to satisfy the query, Prolog backtracks and explores alternative paths to find additional solutions.
+
+Expert systems are a popular application of Prolog. An expert system is a computer program that emulates the decision-making ability of a human expert in a particular domain. It uses a knowledge base and a set of rules to draw conclusions and provide advice or solutions.
+
+_____________________________________________________________________________________________________________________________________
+#####################################################################################################################################
+
+
+BFS DFS-
+
+Breadth-first search (BFS) and depth-first search (DFS) are two commonly used search algorithms in the field of artificial intelligence (AI). Both algorithms are used to traverse and explore search spaces, but they differ in their exploration strategies. Here's a brief explanation of each:
+
+1. Breadth-First Search (BFS): BFS is an uninformed search algorithm that explores all the neighbor nodes at the present depth before moving on to nodes at the next depth level. It starts at the initial state and systematically expands to all neighboring states, maintaining a "frontier" of nodes to be visited. BFS guarantees that the shortest path from the initial state to any reachable state will be found, as long as the branching factor of the search space is finite.
+
+BFS is often used in AI for problems such as finding the shortest path, puzzle-solving, and exploring state spaces where the goal is to explore all possibilities in a systematic manner.
+
+2. Depth-First Search (DFS): DFS is another uninformed search algorithm that explores as far as possible along each branch before backtracking. It starts at the initial state and selects a path, going as deep as possible until it reaches a leaf node or a node with no unvisited neighbors. If it reaches a dead end, it backtracks to the most recent node with unexplored neighbors and continues the search from there.
+
+DFS is often used in AI for problems such as searching large state spaces, solving puzzles, and generating game trees. It is useful when the goal is to explore the search space exhaustively or when the depth of the search is more important than finding the shortest path.
+
+In AI, both BFS and DFS have their strengths and weaknesses. BFS guarantees finding the shortest path but may consume more memory and time for large search spaces. DFS is memory-efficient but may get stuck in infinite loops or explore suboptimal paths.
+
+The choice between BFS and DFS depends on the specific problem at hand, the characteristics of the search space, and the desired outcomes of the AI algorithm.
+
+
+_______________________________________________________________________________________________________________________________________
+
+#######################################################################################################################################
+
+A * Algorithm-
+
+The A* (pronounced "A-star") algorithm is a popular informed search algorithm commonly used in artificial intelligence for pathfinding and graph traversal problems. It is an extension of Dijkstra's algorithm with an added heuristic component that guides the search towards the goal.
+
+The A* algorithm uses a combination of two factors to make decisions during the search process:
+
+1. Cost to Reach: A* maintains a cost value for each node, known as the "g-score," which represents the cost of the path from the start node to that node. Initially, all nodes have an infinite cost, except the start node, which has a cost of 0.
+
+2. Heuristic Estimate: A* uses a heuristic function, denoted as "h(n)," to estimate the cost from each node to the goal node. The heuristic function provides an optimistic estimate of the remaining cost to reach the goal. It should be admissible, meaning that it never overestimates the actual cost.
+
+Based on these factors, A* assigns each node a "f-score" that combines the g-score and the heuristic estimate:
+
+f(n) = g(n) + h(n)
+
+The algorithm maintains an open list of unvisited nodes and a closed list of visited nodes. It starts with the start node and iteratively selects the node with the lowest f-score from the open list. It expands the selected node by examining its neighbors, calculating their g-scores and updating their f-scores accordingly.
+
+During expansion, A* checks if a neighboring node is already on the open list or the closed list. If it is on the closed list and the new path has a lower cost, the node is moved back to the open list. If it is on the open list and the new path has a lower cost, the g-score is updated. If the node is not on either list, it is added to the open list.
+
+A* continues this process until the goal node is reached or there are no more nodes on the open list. Once the goal is reached, the algorithm can reconstruct the optimal path by following the parent pointers from the goal node back to the start node.
+
+The A* algorithm is considered optimal and complete, meaning it is guaranteed to find the shortest path if one exists, as long as the heuristic is admissible. It is widely used in various applications such as pathfinding in games, robotic navigation, and route planning.
+

@@ -1,0 +1,30 @@
+graph = {0: [1, 2],
+         1: [0, 3, 4],
+         2: [0, 5],
+         3: [1],
+         4: [1],
+         5: [2]}
+
+# Define the DFS function
+
+
+def dfs(current, visited):
+    # Mark the current node as visited
+    visited.add(current)
+    print(current, end=" ")
+
+    # Check if the current node is the goal node
+    if current == 4:
+        return True
+
+    # Explore the element of the current node recursively  (Here element is neighbour)
+    for element in graph[current]:
+        if element not in visited:
+            if dfs(element, visited):
+                return True
+
+    return False
+
+
+# Call the DFS function with the root node
+dfs(0, set())

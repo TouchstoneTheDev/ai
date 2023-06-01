@@ -1,0 +1,225 @@
+*************COPY THE CODE CAUTIOUSLY. DO NOT COPY THE COMMENTS. COMMENTS GET SHIFTED ACCORDING TO TAB SIZE****************************
+
+Experiment No. 1
+
+Aim: Implement depth first search algorithm and Breadth First Search algorithm, Use an undirected
+graph and develop a recursive algorithm for searching all the vertices of a graph or tree data
+structure.
+
+Objective: To study and implementation of searching techniques.
+
+
+
+
+
+##################################Code:###########################################
+
+#These lines import the necessary modules from the collections package. collections provides specialized container datatypes that are alternatives to 
+#built-in containers like dictionaries, lists, etc. The defaultdict class is a dictionary subclass that provides a default value for missing keys.
+
+import collections  
+from collections import defaultdict
+
+
+#This is the implementation of the Depth First Search (DFS) algorithm. 
+#The function takes four parameters: visited (a set to keep track of visited nodes), graph (the graph represented as a dictionary), root (the starting #node), and goal (the goal node to search for). The function recursively visits the nodes in a depth-first manner. It starts with the root node and explores #each unvisited neighbor until it reaches the goal node. The nodes are printed as they are visited, and when the goal node is found, it prints "Goal #Found!!". 
+
+def dfs(visited,graph,root,goal):
+    if root not in visited:
+        print(root)
+        visited.add(root)
+
+        for neighbour in graph[root]:
+            if neighbour!=goal :
+                dfs(visited,graph,neighbour,goal)
+            else :
+                print(neighbour)
+                print("Goal Found!!")
+            break
+
+
+#This is the implementation of the Breadth First Search (BFS) algorithm. The function takes three parameters: graph (the graph represented as a dictionary), #root (the starting node), and goal (the goal node to search for). The function uses a queue data structure to keep track of the nodes to visit. It starts #with the root node, adds it to the visited set, and iteratively visits the neighbors of each node in breadth-first order. The nodes are printed as they are #visited, and when the goal node is found, it prints "Goal found!!". 
+
+def bfs(graph, root,goal):
+ visited, queue = set(), collections.deque([root])
+ visited.add(root)
+ while queue:
+    vertex = queue.popleft()
+    print(str(vertex) + " ", end="")
+    if vertex!=goal :
+        for neighbour in graph[vertex]:
+            if neighbour not in visited:
+                visited.add(neighbour)
+                queue.append(neighbour)
+    else :
+        print("Goal found!!")
+        break
+
+
+#These lines initialize the visited set to keep track of visited nodes and create an empty defaultdict called graph. The graph is used to represent the #adjacency list of the graph, where each key is a node and the corresponding value is a list of its adjacent nodes.
+
+visited=set()
+graph=defaultdict(list)
+
+
+#This line prompts the user to enter the number of nodes in the graph and assigns the input to the variable n.
+
+n=int(input("Enter the number of nodes in the graph: "))
+
+
+#These lines construct the graph by iterating over each node. For each node, the user is prompted to enter the node's label (node) and the number of #adjacent nodes (adj). Then, for each adjacent node, the user is prompted to enter its label (adj_node), and it is appended to the adjacency list of the #current node in the graph. 
+
+for i in range(1,n+1):
+ node=(input("Enter the node : " + str(i)+ " "))
+ graph[node]=[]
+ adj=int(input("Enter the number of nodes adjacent to " + node + " : "))
+ for j in range(1,adj+1):
+    adj_node=(input("Enter the adjacent node " +str(j)+" : "))
+    graph[node].append(adj_node)
+
+
+#This line prints the constructed graph.#
+
+print("Graph is ---->> ",graph)
+while True:
+
+
+#This is the main program loop. It repeatedly displays a menu, prompts the user for a choice, and performs the corresponding action.
+
+#If the user chooses option 1, they are prompted to enter the starting node (a) and the goal node (goal), and the dfs function is called with the provided #parameters.
+
+#If the user chooses option 2, they are prompted to enter the starting node (b) and the goal node (goal), and the bfs function is called with the provided #parameters.
+
+#If the user chooses option 3, the loop is broken, and the program exits.
+
+#If the user enters an invalid choice, an error message is displayed.
+
+
+
+ print("*****MENU******")
+ print("1. Depth First Search")
+ print("2. Breadth First Search")
+ print("3. EXIT")
+ c=int(input("Enter your choice: "))
+ if c==1:
+    a=(input("enter the starting node: "))
+    goal=input("enter goal node")
+    dfs(visited,graph,a,goal)
+
+ elif c==2:
+    b=(input("Enter the starting node: "))
+    goal=input("Enter the goal node : ")
+    bfs(graph,b,goal)
+ elif c==3:
+    break
+ else:
+    print("Invalid choice!!!!!!")
+
+
+###########################Detailed Explanation:#####################################
+
+import collections: This line imports the collections module from the Python standard library. It provides specialized container datatypes, including deque, which is used in this code.
+
+from collections import defaultdict: This line imports the defaultdict class from the collections module. defaultdict is a subclass of the built-in dict class and provides a default value for keys that are accessed but not present in the dictionary.
+
+def dfs(visited, graph, root, goal):: This line defines a function named dfs that performs depth-first search. It takes four parameters: visited (a set to keep track of visited nodes), graph (a graph represented as a dictionary), root (the starting node for DFS traversal), and goal (the node to search for).
+
+Inside the dfs function:
+
+if root not in visited:: This condition checks if the current node (root) has not been visited before. If it's not visited, the following actions are performed:
+
+print(root): Prints the current node.
+visited.add(root): Adds the current node to the set of visited nodes.
+for neighbour in graph[root]:: This iterates over the neighbors of the current node in the graph.
+
+if neighbour != goal: dfs(visited, graph, neighbour, goal): If the neighbor is not the goal node, it recursively calls the dfs function with the neighbor as the new root.
+else: print(neighbour) and print("Goal Found!!"): If the neighbor is the goal node, it prints the goal node and "Goal Found!!" and stops the DFS traversal.
+break: This breaks the loop after the first iteration, ensuring that only one neighbor is visited in each iteration.
+def bfs(graph, root, goal):: This line defines a function named bfs that performs breadth-first search. It takes three parameters: graph (a graph represented as a dictionary), root (the starting node for BFS traversal), and goal (the node to search for).
+
+Inside the bfs function:
+
+visited, queue = set(), collections.deque([root]): This line initializes a set to keep track of visited nodes (visited) and a deque (double-ended queue) called queue with the root as the initial node.
+visited.add(root): Adds the root node to the set of visited nodes.
+while queue:: This loop continues until the queue is empty.
+vertex = queue.popleft(): Removes and returns the leftmost (oldest) node from the queue.
+print(str(vertex) + " ", end=""): Prints the visited node followed by a space, without moving to a new line.
+If the vertex is not the goal node, it iterates over the neighbors of the vertex in the graph:
+if neighbour not in visited:: Checks if the neighbor has not been visited.
+visited.add(neighbour): Adds the neighbor to the set of visited nodes.
+queue.append(neighbour): Adds the neighbor to the right end of the queue.
+If the vertex is the goal node, it prints "Goal found!!" and breaks the loop.
+visited = set(): Creates an empty set to store visited nodes.
+
+graph = defaultdict(list): Creates a defaultdict object that will be used to represent the graph. The graph is initialized as an empty dictionary with a list as the default value for missing keys.
+
+n = int(input("Enter the number of nodes in the graph: ")): Prompts the user to enter the number of nodes in the graph and assigns it to the variable n.
+
+for i in range(1, n+1):: Iterates i from 1 to n (inclusive).
+
+Inside the loop:
+
+node = input("Enter the node: " + str(i) + " "): Prompts the user to enter the name of the node and assigns it to the variable node.
+graph[node] = []: Adds an entry to the graph dictionary with the node as the key and an empty list as the value.
+adj = int(input("Enter the number of nodes adjacent to " + node + " : ")): Prompts the user to enter the number of nodes adjacent to the current node and assigns it to the variable adj.
+for j in range(1, adj+1):: Iterates j from 1 to adj (inclusive).
+adj_node = input("Enter the adjacent node " + str(j) + " : "): Prompts the user to enter the name of the adjacent node and assigns it to the variable adj_node.
+graph[node].append(adj_node): Appends the adj_node to the list of neighbors for the current node in the graph dictionary.
+print("Graph is ---->> ", graph): Prints the final representation of the graph.
+
+The code then enters a loop that displays a menu and performs actions based on the user's choice:
+
+If c == 1: Prompts the user to enter the starting node (a) and the goal node, and calls the dfs function with the provided arguments.
+If c == 2: Prompts the user to enter the starting node (b) and the goal node, and calls the bfs function with the provided arguments.
+If c == 3: Breaks out of the loop and exits the program.
+If none of the above conditions are met, it displays an "Invalid choice!!!!!!" message.
+
+
+
+###########################################Theory:############################################33
+GRAPH TRAVERSALS
+Graph traversal means visiting every vertex and edge exactly once in a well-defined order. While using
+certain graph algorithms, you must ensure that each vertex of the graph is visited exactly once. The
+order in which the vertices are visited are important and may depend upon the algorithm or question
+that you are solving.
+
+Breadth-first search (BFS) is an algorithm used for tree traversal on graphs or tree data structures.
+BFS can be easily implemented using recursion and data structures like dictionaries and lists.
+BFS Algorithm:
+1. Pick any node, visit the adjacent unvisited vertex, mark it as visited, display it, and insert it in a
+queue.
+2. If there are no remaining adjacent vertices left, remove the first vertex from the queue.
+3. Repeat step 1 and step 2 until the queue is empty or the desired node is found.
+
+BFS Algorithm Complexity
+The time complexity of the BFS algorithm is represented in the form of O(V + E), where V is
+the number of nodes and E is the number of edges.The space complexity of the algorithm is O(V).
+
+BFS Algorithm Applications
+1. To build index by search index
+2. For GPS navigation
+3. Path finding algorithms
+
+
+
+
+DEPTH FIRST SEARCH (DFS)
+
+Depth first Search or Depth first traversal is a recursive algorithm for searching all the vertices of a
+graph or tree data structure. Traversal means visiting all the nodes of a graph.
+
+The DFS algorithm works as follows:
+1. Start by putting any one of the graph's vertices on top of a stack.
+2. Take the top item of the stack and add it to the visited list.
+3. Create a list of that vertex's adjacent nodes. Add the ones which aren't in the visited list
+to the top of the stack.
+4. Keep repeating steps 2 and 3 until the stack is empty.
+
+
+Complexity of Depth First Search
+The time complexity of the DFS algorithm is represented in the form of O(V + E), where V is the
+number of nodes and E is the number of edges. The space complexity of the algorithm is O(V).
+
+Application of DFS Algorithm
+1. For finding the path
+2. To test if the graph is bipartite

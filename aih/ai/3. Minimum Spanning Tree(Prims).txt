@@ -1,0 +1,128 @@
+*******Time Complexity = O(E log V) ***********
+*************COPY THE CODE CAUTIOUSLY. DO NOT COPY THE COMMENTS. COMMENTS GET SHIFTED ACCORDING TO TAB SIZE****************************
+
+
+Aim: Implement Greedy Search Algorithm for any of the following application: Prim's Minimal
+Spanning Tree Algorithm
+
+Objective:
+• To study and implement greedy search algorithm: Prim’s minimum spanning tree
+
+
+#######################################Code:##############################################33
+
+#This line imports the sys module, which provides access to some variables used or maintained by the interpreter and to functions that interact strongly #with the interpreter.
+
+import sys
+
+#This line defines a function called prim that takes a graph as input. This function implements Prim's algorithm to find the minimum #spanning tree (MST) of #a weighted undirected graph.
+
+def prim(graph):
+    num_vertices = len(graph)
+    visited = [False] * num_vertices
+    min_weights = [sys.maxsize] * num_vertices  
+    parent = [None] * num_vertices  
+    min_weights[0] = 0  
+
+#This line starts a loop that will iterate for num_vertices times. It initializes min_weight to a large value and min_vertex to -1.
+
+    for _ in range(num_vertices):
+        min_weight = sys.maxsize
+        min_vertex = -1
+
+#This nested loop iterates over all vertices in the graph. It checks if the vertex v has not been visited (not visited[v]) and if its minimum weight #(min_weights[v]) is less than the current minimum weight (min_weight). 
+
+        for v in range(num_vertices):
+            if not visited[v] and min_weights[v] < min_weight:
+                min_weight = min_weights[v]
+                min_vertex = v
+
+#After finding the vertex with the minimum weight, it marks it as visited by setting visited[min_vertex] to True.
+
+        visited[min_vertex] = True
+
+#This loop iterates over all vertices again. 
+
+        for v in range(num_vertices):
+            if (
+                not visited[v]
+                and graph[min_vertex][v] != 0
+                and graph[min_vertex][v] < min_weights[v]
+            ):
+                min_weights[v] = graph[min_vertex][v]
+                parent[v] = min_vertex
+
+#After the algorithm has processed all vertices, it returns the parent list, which represents the minimum spanning tree.
+
+    return parent
+
+#This line prompts the user to enter the number of vertices in the graph and converts the input to an integer using int().
+
+num_vertices = int(input("Enter the number of vertices: "))
+
+#These lines create an empty graph matrix (a 2D list) with dimensions num_vertices x num_vertices. 
+
+graph = [[0] * num_vertices for _ in range(num_vertices)]
+for i in range(num_vertices):
+    for j in range(num_vertices):
+        graph[i][j] = int(input(f"Enter the weight between vertex {i} and {j}: "))
+
+#This line calls the prim function with the graph as an argument and assigns the returned MST to the variable mst.
+
+mst = prim(graph)
+
+#These lines print the minimal spanning tree
+
+
+mst = prim(graph)
+
+#Calculate total weight for mst.
+
+total_weight = 0
+print("Minimal Spanning Tree:")
+for i in range(1, num_vertices):
+    weight = graph[i][mst[i]]
+    total_weight += weight
+    print(f"{mst[i]} - {i}    weight: {weight}")
+
+print("Total weight of the Minimal Spanning Tree:", total_weight)
+
+
+
+##########################################Theory:#####################################
+Theory:
+A greedy algorithm is an algorithmic strategy that makes the best optimal choice at each small stage
+with the goal of this eventually leading to a globally optimum solution. This means that the algorithm
+picks the best solution at the moment without regard for consequences.
+Prim's algorithm is a minimum spanning tree algorithm that takes a graph as input and finds the subset
+of the edges of that graph which
+• form a tree that includes every vertex
+• has the minimum sum of weights among all the trees that can be formed from the graph
+
+Prim's Algorithm Complexity
+The time complexity of Prim's algorithm is O(E log V).
+
+Prim's Algorithm Application
+• Laying cables of electrical wiring
+• In network designed
+
+
+_________________________________________________________________________________________
+Input-
+
+Enter the number of vertices: 3
+Enter the weight between vertex 0 and 0: 0
+Enter the weight between vertex 0 and 1: 2
+Enter the weight between vertex 0 and 2: 3
+Enter the weight between vertex 1 and 0: 2
+Enter the weight between vertex 1 and 1: 0
+Enter the weight between vertex 1 and 2: 4
+Enter the weight between vertex 2 and 0: 3
+Enter the weight between vertex 2 and 1: 4
+Enter the weight between vertex 2 and 2: 0
+Minimal Spanning Tree:
+0 - 1    weight: 2
+0 - 2    weight: 3
+Total weight of the Minimal Spanning Tree: 5
+
+Process finished with exit code 0

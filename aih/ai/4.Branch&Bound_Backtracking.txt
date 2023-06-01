@@ -1,0 +1,301 @@
+*************COPY THE CODE CAUTIOUSLY. DO NOT COPY THE COMMENTS. COMMENTS GET SHIFTED ACCORDING TO TAB SIZE****************************
+
+EXPERIMENT NO. 4
+
+Aim: Implement the solution for a Constraint Satisfaction Problem using Branch and Bound and
+Backtracking for n-queens problem or a graph coloring problem
+Objective:
+• To study and implement n-queens problem using Branch and Bound and backtracking
+
+######################################Branch and Bound Code:###############################################3
+
+#printSolution(board): This function is responsible for printing the final solution board. It takes a 2D list board as input and prints each element row by #row.
+
+def printSolution(board):
+    for i in range(N):
+        for j in range(N):
+            print(board[i][j], end = " ")
+        print()
+ 
+#isSafe(row, col, nd, rd, rowLookup, ndLookup, rdLookup): This function checks if it is safe to place a queen at the specified row and col position on the #chessboard. It takes the current row and column indices, as well as several lookup arrays (ndLookup, rdLookup, and rowLookup) representing the occupied #normal diagonals, reverse diagonals, and rows. It returns True if it is safe to place a queen at the given position, and False otherwise.
+
+def isSafe(row, col, nd, rd,rowLookup, ndLookup,rdLookup):
+    if (ndLookup[nd[row][col]] or rdLookup[rd[row][col]] or rowLookup[row]):
+        return False
+    return True
+ 
+#solveNQueensUtil(board, col, nd, rd, rowLookup, ndLookup, rdLookup): This is the main recursive utility function that finds a solution to the N-Queens #problem. It takes the chessboard board, the current column index col, and various lookup arrays as parameters. It explores different configurations by #placing queens in each row of the current column and recursively moves to the next column until a valid solution is found or all possibilities are #exhausted. It returns True if a solution is found and False otherwise.
+
+def solveNQueensUtil(board, col, nd, rd,rowLookup, ndLookup,rdLookup):   
+    if(col >= N):
+        return True
+    for i in range(N):
+        if(isSafe(i, col, nd, rd,rowLookup, ndLookup,rdLookup)):
+                     
+           
+            board[i][col] = 1
+            rowLookup[i] = True
+            ndLookup[nd[i][col]] = True
+            rdLookup[rd[i][col]] = True
+             
+           
+            if(solveNQueensUtil(board, col + 1,nd, rd,rowLookup, ndLookup,rdLookup)):
+                return True            
+            board[i][col] = 0
+            rowLookup[i] = False
+            ndLookup[nd[i][col]] = False
+            rdLookup[rd[i][col]] = False    
+    return False
+ 
+#solveNQueens(N): This is the entry point for solving the N-Queens problem. It takes the size of the chessboard N as input. It initializes the chessboard #and the necessary lookup arrays. Then, it calls the solveNQueensUtil function to find a solution starting from the first column (col = 0). If a solution is #found, it prints the solution by calling printSolution(board); otherwise, it prints a message indicating that a solution does not exist.
+
+def solveNQueens(N):
+    
+    board = [[0 for i in range(N)] for j in range(N)]
+     
+    
+    nd = [[0 for i in range(N)] for j in range(N)]
+    rd = [[0 for i in range(N)] for j in range(N)]    
+    rowLookup = [False] * N
+     
+    
+    x = 2 * N - 1
+    ndLookup = [False] * x
+    rdLookup= [False] * x
+     
+
+    for r in range(N):
+        for c in range(N):
+            nd[r][c] = r + c
+            rd[r][c] = r - c + N - 1
+     
+    if(solveNQueensUtil(board, 0, nd, rd,rowLookup, ndLookup,rdLookup) == False):
+        print("Solution does not exist")
+        return False
+         
+    
+    printSolution(board)
+    return True
+ 
+
+N=int(input("Enter a Number: "))
+solveNQueens(N)
+
+
+#Now, let's summarize the overall flow of the code:
+
+#The main function solveNQueens(N) is called with the input N representing the size of the chessboard.
+#The chessboard (board) and the necessary lookup arrays (ndLookup, rdLookup, and rowLookup) are initialized.
+#The normal diagonal (nd) and reverse diagonal (rd) arrays are constructed based on the current row and column positions.
+#The solveNQueensUtil function is called to find a solution starting from the first column (col = 0).
+#If a solution is found, the printSolution function is called to print the final configuration of the chessboard.
+#If a solution does not exist, a message is printed indicating that there is no solution.
+
+
+
+
+##############################Detailed Explaination:###########################################3
+
+def printSolution(board):: This function is responsible for printing the final solution board. It takes a 2D list board as input.
+
+for i in range(N):: This loop iterates over the rows of the board.
+
+for j in range(N):: This loop iterates over the columns of the board for each row.
+
+print(board[i][j], end=" "): It prints the value at position board[i][j] without moving to the next line. The end=" " parameter is used to separate the values with a space instead of a newline.
+
+print(): This line prints a newline character, moving to the next line after printing one row of the board.
+
+def isSafe(row, col, nd, rd, rowLookup, ndLookup, rdLookup):: This function checks if it is safe to place a queen at the specified row and col position on the chessboard. It takes the following parameters:
+
+row: The row index.
+col: The column index.
+nd: The 2D list representing the normal diagonal.
+rd: The 2D list representing the reverse diagonal.
+rowLookup: A list to keep track of occupied rows.
+ndLookup: A list to keep track of occupied normal diagonals.
+rdLookup: A list to keep track of occupied reverse diagonals.
+if (ndLookup[nd[row][col]] or rdLookup[rd[row][col]] or rowLookup[row]):: This line checks if there is a queen already placed in the same normal diagonal (nd), reverse diagonal (rd), or row (rowLookup). If any of these conditions are true, it means placing a queen at this position is not safe, so it returns False.
+
+return True: This line is reached if no conflicts were found, indicating that it is safe to place a queen at the specified position.
+
+def solveNQueensUtil(board, col, nd, rd, rowLookup, ndLookup, rdLookup):: This is the main recursive utility function that finds a solution to the N-Queens problem. It takes the following parameters:
+
+board: The 2D list representing the chessboard.
+col: The current column index.
+nd: The 2D list representing the normal diagonal.
+rd: The 2D list representing the reverse diagonal.
+rowLookup: A list to keep track of occupied rows.
+ndLookup: A list to keep track of occupied normal diagonals.
+rdLookup: A list to keep track of occupied reverse diagonals.
+if (col >= N):: This line checks if col is greater than or equal to N, which means all columns have been traversed, and a solution has been found. In this case, it returns True to indicate a successful solution.
+
+for i in range(N):: This loop iterates over the rows of the chessboard.
+
+if (isSafe(i, col, nd, rd, rowLookup, ndLookup, rdLookup)):: This line checks if it is safe to place a queen at the current i row and col column. It calls the isSafe function to perform the check.
+
+board[i][col] = 1: This line places a queen at the current row i and column col on the board by assigning the value 1 to board[i][col].
+
+19-22. These lines update the lookup arrays (rowLookup, ndLookup, and rdLookup) to mark the current row, the normal diagonal (nd), and the reverse diagonal (rd) as occupied by a queen.
+
+if (solveNQueensUtil(board, col + 1, nd, rd, rowLookup, ndLookup, rdLookup)):: This line makes a recursive call to solveNQueensUtil by moving to the next column (col + 1) to continue placing queens in the remaining columns. If this recursive call returns True, it means a solution has been found, and it returns True immediately.
+
+board[i][col] = 0: This line is reached if placing a queen at the current position did not lead to a solution. It removes the queen from board[i][col] by assigning the value 0.
+
+. These lines undo the changes made in the lookup arrays (rowLookup, ndLookup, and rdLookup) for the current position.
+
+return False: This line is reached if no solution is found after trying all rows. It indicates that the current configuration of queens is not valid, and it returns False.
+
+def solveNQueens(N):: This function is the entry point for solving the N-Queens problem. It takes the size of the chessboard N as input.
+
+board = [[0 for i in range(N)] for j in range(N)]: This line initializes the board 2D list with zeros, representing an empty chessboard.
+
+. These lines initialize the nd (normal diagonal), rd (reverse diagonal), and lookup arrays (rowLookup, ndLookup, and rdLookup) with appropriate dimensions and initial values.
+
+. These lines calculate and assign values to the nd (normal diagonal) and rd (reverse diagonal) arrays based on the current row and column positions.
+
+if (solveNQueensUtil(board, 0, nd, rd, rowLookup, ndLookup, rdLookup) == False):: This line calls the solveNQueensUtil function to find a solution starting from the first column (col = 0). If it returns False, it means no solution was found.
+
+print("Solution does not exist"): This line prints a message indicating that a solution does not exist.
+
+printSolution(board): This line is reached if a solution is found. It calls the printSolution function to print the final configuration of the chessboard.
+
+return True: This line indicates that a solution was found and returns True.
+
+N = int(input("Enter a Number: ")): This line prompts the user to enter a number, which represents the size of the chessboard.
+
+solveNQueens(N): This line calls the solveNQueens function with the user-provided value of N to find and display the solution.
+
+
+##############################################Theory:########################################
+The N queens puzzle is the problem of placing N chess queens on an N×N chessboard so that no two
+queens threaten each other. Thus, a solution requires that no two queens share the same row, column,
+or diagonal.
+In backtracking solution we backtrack when we hit a dead end. In Branch and Bound solution, after
+building a partial solution, we figure out that there is no point going any deeper as we are going to hit a
+dead end.
+
+
+
+############################################Backtracking Code:################################################
+
+from typing import List
+boardcount=0
+
+#This function checks if it's possible to place a queen at the given 'row' and 'col' position without conflicting with any existing queens on the #chessboard.
+#It takes a 'chessboard' (a 2D list representing the chessboard), a 'row' index, and a 'col' index as parameters.
+#It uses three loops to check for conflicts:
+#The first loop checks if there is a queen in any of the columns before the current 'col' in the same 'row'.
+#The second loop checks the top-left diagonal from the current 'row' and 'col' position up to the top-left corner of the board.
+#The third loop checks the bottom-left diagonal from the current 'row' and 'col' position down to the bottom-left corner of the board.
+#If a conflict is found (i.e., a queen is present in any of the checked positions), the function returns 'False'. Otherwise, it returns 'True'
+
+def isboardok(chessboard:List,row:int,col:int):
+    for c in range(col):
+        if(chessboard[row][c]=='Q'):
+            return False
+    for r,c in zip(range(row-1,-1,-1),range(col-1,-1,-1)):
+        if(chessboard[r][c]=='Q'):
+            return False
+    for r,c in zip(range(row+1,len(chessboard),1),range(col-1,-1,-1)):
+        if(chessboard[r][c]=='Q'):
+            return False
+    return True
+ 
+
+#This function takes a 'chessboard' as a parameter and prints it row by row, displaying the current configuration of the chessboard.
+#It iterates over each row in the 'chessboard' and prints it using the 'print' function.
+#After printing the entire board, it prints an empty line to provide separation between different board configurations.
+
+def displayboard(chessboard:List):
+    for row in chessboard:
+        print(row)
+    print()
+ 
+#This is the main recursive function that generates all possible valid configurations of the chessboard.
+#It takes a 'chessboard' and a 'col' index as parameters.
+#If the 'col' index is greater than or equal to the length of the 'chessboard', it means all the queens have been successfully placed in each column, and a #valid configuration has been found.
+#In that case, the 'boardcount' variable is incremented, and the current configuration is displayed using the 'displayboard' function.
+#If the 'col' index is still within the bounds of the 'chessboard', the function tries to place a queen in each row of the current column ('col').
+#It checks if the position is valid by calling the 'isboardok' function.
+#If the position is valid, the function recursively calls itself with the updated 'chessboard' and the next column ('col + 1') to continue placing queens in #the remaining columns.
+#After the recursive call, the current position ('row', 'col') is reset to '.' to backtrack and explore other possibilities.
+
+def placenqueens(chessboard:List,col:int):
+    global boardcount
+    if(col>=len(chessboard)):
+        boardcount+=1
+        print("Board"+str(boardcount))
+        print("======================")
+        displayboard(chessboard)
+        print("======================\n\n")
+    else:
+        for row in range(len(chessboard)):
+            chessboard[row][col]='Q'
+            if(isboardok(chessboard,row,col)==True):
+                placenqueens(chessboard,col+1)
+            chessboard[row][col]='.' 
+
+#It initializes a variable 'boardcount' to 0, which will be used to keep track of the number of valid chessboard configurations.
+#It prompts the user to enter the size of the chessboard ('N').
+#It initializes an empty 'chessboard' by creating a 2D list with 'N' rows and N columns, filled with '.'.
+#It calls the 'placenqueens' function with the empty 'chessboard' and a starting column index of 0 to begin the backtracking process and generate all valid #configurations of the chessboard.
+
+chessboard=[]
+N=int(input("Enter chessboard size: "))
+for i in range(N):
+    row=["."]*N
+    chessboard.append(row)
+ 
+placenqueens(chessboard,0)
+
+
+###############################################Detailed Explaination:###########################################3
+
+The first line imports the 'List' type from the 'typing' module. This is used to provide type hints for the function parameters and return types.
+
+The next line initializes a variable 'boardcount' to 0. This variable will be used to keep track of the number of valid chessboard configurations.
+
+The 'isboardok' function takes a 'chessboard' (a 2D list representing the chessboard), a 'row' index, and a 'col' index as parameters. This function checks if it's possible to place a queen at the given 'row' and 'col' position without conflicting with any existing queens on the chessboard.
+
+The first loop in 'isboardok' iterates over the columns from 0 to 'col - 1' to check if there is a queen in any of those columns at the same 'row'. If a queen is found, it means the current position is invalid, and the function returns 'False'.
+
+The next two loops in 'isboardok' use 'zip' to iterate over the diagonals of the chessboard. The first diagonal goes from the current 'row' and 'col' position up to the top-left corner of the board, and the second diagonal goes from the current 'row' and 'col' position down to the bottom-left corner of the board. These loops check if there is a queen in any of the positions on these diagonals. If a queen is found, the function returns 'False'.
+
+If none of the checks in 'isboardok' fail, it means the current position is valid, and the function returns 'True'.
+
+The 'displayboard' function takes a 'chessboard' as a parameter and prints it row by row, displaying the current configuration of the chessboard.
+
+The 'placenqueens' function is the main recursive function that generates all possible valid configurations of the chessboard. It takes a 'chessboard' and a 'col' index as parameters.
+
+If the 'col' index is greater than or equal to the length of the 'chessboard', it means all the queens have been placed successfully in each column, and a valid configuration has been found. The 'boardcount' is incremented, and the current configuration is displayed using the 'displayboard' function.
+
+If the 'col' index is still within the bounds of the 'chessboard', the function tries to place a queen in each row of the current column (col) and checks if it's a valid position using the 'isboardok' function.
+
+If the position is valid, the function recursively calls itself with the updated 'chessboard' and the next column ('col + 1') to continue placing queens in the remaining columns.
+
+After the recursive call, the current position ('row', 'col') is reset to '.' to backtrack and explore other possibilities.
+
+Finally, the code prompts the user to enter the size of the chessboard ('N') and initializes an empty chessboard by creating a 2D list with 'N' rows and 'N' columns filled with '.'.
+
+The 'placenqueens' function is called with the empty chessboard and a starting column index of 0 to begin the backtracking process and generate all valid configurations of the chessboard.
+
+
+
+
+#######################################################Theory:###########################################33
+here we are describing backtracking solution. “The idea is to place queens one by one in
+different columns, starting from the leftmost column. When we place a queen in a column, we check
+for clashes with already placed queens. In the current column, if we find a row for which there is no
+clash, we mark this row and column as part of the solution. If we do not find such a row due to clashes,
+then we backtrack and return false.”
+
+1.For the 1st Queen, there are total 8 possibilities as we can place 1st Queen in any row of first
+column. Let’s place Queen 1 on row 3.
+2. After placing 1st Queen, there are 7 possibilities left for the 2nd Queen. But wait, we don’t
+really have 7 possibilities. We cannot place Queen 2 on rows 2, 3 or 4 as those cells are under
+attack from Queen 1. So, Queen 2 has only 8 – 3 = 5 valid positions left.
+3. After picking a position for Queen 2, Queen 3 has even fewer options as most of the cells in its
+column are under attack from the first 2 Queens.
+
+

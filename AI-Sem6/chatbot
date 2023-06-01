@@ -1,0 +1,46 @@
+import random
+greetings = ["hello", "hi", "hey", "yo"]
+farewells = ["bye", "goodbye", "see you later"]
+thanks = ["thanks", "thank you"]
+compliments = ["nice", "good job", "well done"]
+order_inquiries = ["what is my product?"]
+product_name = ["what is the model of the laptop?"]
+processor = ["what is the processor of the laptop?"]
+RAM = ["how much is the RAM provided ?"]
+system_type = ["what is the system type of the laptop?"]
+extra = ["is the laptop touch screen or can we use pen on laptop screen?"]
+customer_service = ["I need to talk to customer service", "customer support"]
+
+
+def respond_to_input(input_text):
+    if input_text.lower() in greetings:
+        return "Hello there! How can I assist you today?"
+    elif input_text.lower() in farewells:
+        return "Goodbye, have a great day!"
+    elif input_text.lower() in thanks:
+        return "You're welcome!"
+    elif input_text.lower() in compliments:
+        return "Thank you, I try my best!"
+    elif any(word in input_text.lower() for word in order_inquiries):
+        return "your product is a laptop"
+    elif any(word in input_text.lower() for word in product_name):
+        return "ASUS ROG STRIX G15"
+    elif any(word in input_text.lower() for word in processor):
+        return "Intel® Core™ i7‑10870H Processor @ 2.40GHz   1.38 GHz"
+    elif any(word in input_text.lower() for word in RAM):
+        return "8.00 GB "
+    elif any(word in input_text.lower() for word in system_type):
+        return "64-bit operating system, x64-based processor"
+    elif any(word in input_text.lower() for word in extra):
+        return "No pen or touch input is available for this display"
+    elif any(word in input_text.lower() for word in customer_service):
+        return "Sure, this is the customer service contact no.(2345567891)"
+    else:
+        return "I'm sorry, I didn't understand what you said. Can you please rephrase or provide more information?"
+
+
+print("Hello! How can I assist you today?")
+while True:
+    user_input = input("You: ")
+    response = respond_to_input(user_input)
+    print("Bot:"+response)
